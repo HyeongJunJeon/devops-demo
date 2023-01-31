@@ -11,16 +11,15 @@ permissions:
 
 env:
   AWS_REGION: "ap-northeast-2"
-  ECR_REGISTRY: "public.ecr.aws/x3j1o7j5/blocko-devops-test"
   ECR_REPOSITORY: "blocko-devops-test"
-  IMAGE_TAG: "1.0"
-  CI: ""
+  ECS_SERVICE: "blocko-devops-test-app"
+  ECS_CLUSTER: "blocko-devops-test-cluster"
+  ECS_TASK_DEFINITION: .aws/definition/blocko-devops-register-task-definition-revision1.json
+  CONTAINER_NAME: "blocko-devops-test"
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
     runs-on: ubuntu-latest
-    environment: production
 
     steps:
       - name: CheckOut
@@ -34,6 +33,10 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
+          run: npm install
+
+      - name: React Build
+        run: npm run build
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -52,9 +55,7 @@ jobs:
           ECR_REGISTRY_PUBLIC: "public.ecr.aws/x3j1o7j5/blocko-devops-test"
           IMAGE_TAG: "1.0"
         run: |
-          npm install
-          npm run build
-          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5/blocko-devops-test
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
+          docker build -t $ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG
           echo "image=$ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
