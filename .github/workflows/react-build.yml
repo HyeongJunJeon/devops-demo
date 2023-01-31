@@ -11,6 +11,7 @@ env:
   ECR_REGISTRY: "public.ecr.aws/x3j1o7j5/blocko-devops-test"
   ECR_REPOSITORY: "blocko-devops-test"
   IMAGE_TAG: latest
+  CI: ""
 
 jobs:
   deploy:
