@@ -6,11 +6,15 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  contents: read
+
 env:
   AWS_REGION: "ap-northeast-2"
   ECR_REGISTRY: "public.ecr.aws/x3j1o7j5/blocko-devops-test"
   ECR_REPOSITORY: "blocko-devops-test"
   IMAGE_TAG: latest
+  CONTAINER_NAME: "blocko-devops-test"
   CI: ""
 
 jobs:
@@ -52,6 +56,7 @@ jobs:
           ECR_REGISTRY_PUBLIC: "public.ecr.aws/x3j1o7j5"
           IMAGE_TAG: "1.0"
         run: |
+          aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "image=$ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
