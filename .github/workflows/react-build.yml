@@ -56,6 +56,6 @@ jobs:
           IMAGE_TAG: "1.0"
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
-          docker build -t $ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "image=$ECR_REGISTRY_PUBLIC/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY_PUBLIC/${{env.ECR_REPOSITORY}}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY_PUBLIC/${{env.ECR_REPOSITORY}}:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY_PUBLIC/${{env.ECR_REPOSITORY}}:$IMAGE_TAG" >> $GITHUB_OUTPUT
