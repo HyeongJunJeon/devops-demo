@@ -1,11 +1,11 @@
-## devops-demo by JHJ
+# devops-demo by JHJ
 
 ## stack
 
-# git action
+- git action
 
-# docker
+- docker
 
-# k8s
+- k8s
 
-# terraform
+- terraform
