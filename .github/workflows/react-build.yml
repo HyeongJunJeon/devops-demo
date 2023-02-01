@@ -40,12 +40,15 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
           run: npm ci
+            npm run lint
+          env: |
+          CI: true
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-          prettier: true
+      # - name: Run linters
+      #   uses: wearerequired/lint-action@v2
+      #   with:
+      #     eslint: true
+      #     prettier: true
 
       - name: React Build
         run: npm run build
