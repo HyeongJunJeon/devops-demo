@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 16
 
-      - name: Cache node modules, run ci & lint
+      - name: Cache node modules, run ci
         uses: actions/cache@v1
         with:
           path: node_modules
@@ -39,17 +39,12 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-          run:
-            npm ci
-            # npm run lint
-          env: |
-          CI: true
+          run: npm ci
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
-          # prettier: true
 
       - name: React Build
         run: npm run build
