@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 16
 
-      - name: Cache node modules
+      - name: Cache node modules, run ci & lint
         uses: actions/cache@v1
         with:
           path: node_modules
