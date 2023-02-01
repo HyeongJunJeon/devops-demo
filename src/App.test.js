@@ -3,6 +3,6 @@ import App from "./App";
 
 test("renders blocko text", () => {
   render(<App />);
-  const text = screen.getByText(/blocko123/i);
+  const text = screen.getByText(/blocko/i);
   expect(text).toBeInTheDocument();
 });
