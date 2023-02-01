@@ -34,7 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-          run: npm install
+          run: npm ci
 
       - name: Run linters
         uses: wearerequired/lint-action@v2
