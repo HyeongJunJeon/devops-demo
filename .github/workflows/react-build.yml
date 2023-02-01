@@ -41,10 +41,11 @@ jobs:
             ${{ runner.OS }}-
           run: npm ci
 
-      - name: Run linters
+      - name: lint and test
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
+          run: npm run test
 
       - name: React Build
         run: npm run build
