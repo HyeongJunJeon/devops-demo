@@ -22,18 +22,33 @@ env:
   # IMAGE_TAG: "latest"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: CheckOut
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16
 
+      - name: Lint
+        uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+
+      - name: Test
+        run: npm run test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Cache node modules, Install Dependencies
         uses: actions/cache@v1
         with:
@@ -43,14 +58,6 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
           run: npm ci
-
-      - name: Lint
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint: true
-
-      - name: Test
-        run: npm run test
 
       - name: Build
         run: npm run build
