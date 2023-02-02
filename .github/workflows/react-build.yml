@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 16
 
-      - name: Cache node modules, run ci
+      - name: Cache node modules, Install Dependencies
         uses: actions/cache@v1
         with:
           path: node_modules
@@ -44,7 +44,7 @@ jobs:
             ${{ runner.OS }}-
           run: npm ci
 
-      - name: Lint Check
+      - name: Lint
         uses: wearerequired/lint-action@v2
         with:
           eslint: true
@@ -52,7 +52,7 @@ jobs:
       - name: Test
         run: npm run test
 
-      - name: React Build
+      - name: Build
         run: npm run build
 
       - name: Configure AWS credentials
@@ -83,3 +83,4 @@ jobs:
           echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v}" >> $GITHUB_OUTPUT
           else
           docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
+          fi
