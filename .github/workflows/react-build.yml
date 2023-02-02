@@ -75,11 +75,11 @@ jobs:
           echo ${{ github.ref }}
           ref='refs/tags/v'
           if [[ ${{ github.ref }} == *${ref}* ]]; then
-          v=$(echo ${{ github.ref }} | cut -d '/' -f3)
-          echo "version tag is ${v}"
+          v= $(echo ${{ github.ref }} | cut -d '/' -f3)
+          echo "version tag is ${ v }"
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
-          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v} .
-          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v}
-          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ v } .
+          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ v }
+          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ v }" >> $GITHUB_OUTPUT
           else
           docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
