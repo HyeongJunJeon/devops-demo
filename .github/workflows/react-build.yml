@@ -19,7 +19,7 @@ env:
   ECS_CLUSTER: "blocko-devops-test-cluster"
   ECS_TASK_DEFINITION: .aws/definition/blocko-devops-register-task-definition-revision1.json
   CONTAINER_NAME: "blocko-devops-test"
-  IMAGE_TAG: "latest"
+  # IMAGE_TAG: "latest"
 
 jobs:
   build:
@@ -70,17 +70,9 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY_PUBLIC: "public.ecr.aws/x3j1o7j5"
-          # IMAGE_TAG: "1.0"
+          IMAGE_TAG: "1.0"
         run: |
-          echo ${{ github.ref }}
-          ref='refs/tags/v'
-          if [[ ${{ github.ref }} == *${ref}* ]]; then
-          v= $(echo ${{ github.ref }} | cut -d '/' -f3)
-          echo "version tag is ${v}"
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
-          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v} .
-          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v}
-          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${v}" >> $GITHUB_OUTPUT
-          else
-          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
-          fi
+          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG } .
+          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG }
+          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG }" >> $GITHUB_OUTPUT
