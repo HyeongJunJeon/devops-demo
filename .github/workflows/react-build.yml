@@ -19,7 +19,7 @@ env:
   ECS_CLUSTER: "blocko-devops-test-cluster"
   ECS_TASK_DEFINITION: .aws/definition/blocko-devops-register-task-definition-revision1.json
   CONTAINER_NAME: "blocko-devops-test"
-  # IMAGE_TAG: "latest"
+  IMAGE_TAG: "latest"
 
 jobs:
   test:
@@ -77,7 +77,7 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY_PUBLIC: "public.ecr.aws/x3j1o7j5"
-          IMAGE_TAG: "1.0"
+          # IMAGE_TAG: "1.0"
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
           docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG } .
