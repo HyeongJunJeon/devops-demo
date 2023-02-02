@@ -36,6 +36,16 @@ jobs:
         with:
           node-version: 16
 
+      - name: Cache node modules, Install Dependencies
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-
+          run: npm ci
+
       - name: Lint
         uses: wearerequired/lint-action@v2
         with:
@@ -49,16 +59,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Cache node modules, Install Dependencies
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-          run: npm ci
-
       - name: Build
         run: npm run build
 
