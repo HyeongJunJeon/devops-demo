@@ -9,8 +9,7 @@ on:
     branches: ["main"]
 
 permissions:
-  contents: write
-  checks: write
+  contents: read
 
 env:
   AWS_REGION: "ap-northeast-2"
@@ -59,6 +58,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16
+
+      - name: CheckOut
+        uses: actions/checkout@v3
+
       - name: Build
         run: npm run build
 
@@ -77,9 +84,9 @@ jobs:
         id: build-image
         env:
           ECR_REGISTRY_PUBLIC: "public.ecr.aws/x3j1o7j5"
-          # IMAGE_TAG: "1.0"
+          IMAGE_TAG: "1.0"
         run: |
           aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/x3j1o7j5
-          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG } .
-          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG }
-          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:${ IMAGE_TAG }" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG .
+          docker push $ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY_PUBLIC/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
