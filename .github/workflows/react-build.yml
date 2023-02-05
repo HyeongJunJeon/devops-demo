@@ -1,4 +1,4 @@
-name: React build
+name: React Test and Build
 
 on:
   push:
