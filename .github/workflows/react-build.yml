@@ -22,10 +22,7 @@ env:
 
 jobs:
   test:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     steps:
       - name: CheckOut
         uses: actions/checkout@v3
@@ -58,13 +55,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: CheckOut
+        uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 16
-
-      - name: CheckOut
-        uses: actions/checkout@v3
 
       - name: Cache node modules, Install Dependencies
         uses: actions/cache@v1
@@ -74,7 +71,7 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-          run: npm install
+          run: npm ci
 
       - name: Build
         run: npm run build
