@@ -1,11 +1,7 @@
-name: React Test and Build
+name: CI/CD
 
 on:
   push:
-    branches: ["main"]
-    tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
-  pull_request:
     branches: ["main"]
 
 permissions:
@@ -30,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
 
       - name: Cache node modules, Install Dependencies
         uses: actions/cache@v1
@@ -40,7 +36,7 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
-          run: npm ci
+          run: yarn install --immutable --immutable-cache --check-cache
 
       - name: Lint
         uses: wearerequired/lint-action@v2
